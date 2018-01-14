@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import ListBooks from './ListBooks.js'
 import SearchBook from './SearchBook.js'
 // import * as BooksAPI from './BooksAPI'
@@ -24,7 +25,7 @@ class BooksApp extends React.Component {
           <div>
             <ListBooks />
             <div className="open-search">
-              <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
+              <Link to="/search">Add a book</Link>
             </div>
           </div>
         )}
