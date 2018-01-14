@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { Route } from 'react-router-dom'
 import ListBooks from './ListBooks.js'
@@ -6,7 +6,7 @@ import SearchBook from './SearchBook.js'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
 
-class BooksApp extends React.Component {
+class BooksApp extends Component {
   state = {
     books: []
   }
@@ -27,7 +27,7 @@ componentDidMount() {
           </div>
           )}/>
         <Route path="/search" render={() => (
-          <SearchBook />
+          <SearchBook books={this.state.books} />
           )}/>
       </div>
     )

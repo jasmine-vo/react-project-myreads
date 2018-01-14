@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 class SearchBook extends Component {
@@ -6,7 +7,7 @@ class SearchBook extends Component {
    return (
      <div className="search-books">
       <div className="search-books-bar">
-     	<Link className="close-search" to="/">Close</Link>
+        <Link className="close-search" to="/">Close</Link>
         <div className="search-books-input-wrapper">
           {/*
             NOTES: The search from BooksAPI is limited to a particular set of search terms.
@@ -26,6 +27,10 @@ class SearchBook extends Component {
     </div>
    )
   }
+}
+
+SearchBook.propTypes = {
+  books: PropTypes.array.isRequired
 }
 
 export default SearchBook
