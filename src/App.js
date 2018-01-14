@@ -20,7 +20,7 @@ componentDidMount() {
       <div className="app">
         <Route exact path="/" render={() => (
           <div>
-            <ListBooks />
+            <ListBooks books={this.state.books} />
             <div className="open-search">
               <Link to="/search">Add a book</Link>
             </div>
