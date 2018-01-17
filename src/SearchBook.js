@@ -17,6 +17,7 @@ class SearchBook extends Component {
 
   updateQuery = (e) => {
     this.setState({ query: e.target.value })
+    console.log(this.state.query)
     
     if (this.state.query !== '') {
       const match = new RegExp(escapeRegExp(this.state.query), 'i')
@@ -24,6 +25,7 @@ class SearchBook extends Component {
       
       BooksAPI.search(this.state.query, 20).then((books) => {
       books.length > 0 ? this.setState({ showingBooks: books.concat(bookshelf).sort(sortBy('title')) }) : this.setState ({ showingBooks: bookshelf.sort(sortBy('title')) })
+      console.log(this.state.showingBooks)
       })
     } else {
       this.setState({ showingBooks: [] })
@@ -59,7 +61,7 @@ class SearchBook extends Component {
               <li key={book.id}>
                 <div className="book">
                   <div className="book-top">
-                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
+                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks && book.imageLinks.thumbnail})` }}></div>
                     <div className="book-shelf-changer">
                       <select>
                         <option value="none" disabled>Move to...</option>
@@ -70,8 +72,8 @@ class SearchBook extends Component {
                       </select>
                     </div>
                   </div>
-                  <div className="book-title">{book.title}</div>
-                  <div className="book-authors">{book.authors.join(", ")}</div>
+                  <div className="book-title">{book.title && book.title}</div>
+                  <div className="book-authors">{book.authors && book.authors.join(", ")}</div>
                 </div>
               </li>
             )) : <div></div>}
