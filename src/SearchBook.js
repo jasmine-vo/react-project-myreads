@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import escapeRegExp from 'escape-string-regexp'
 import sortBy from 'sort-by'
+import * as BooksAPI from './BooksAPI'
 
 class SearchBook extends Component {
   static propTypes = {
@@ -10,24 +11,27 @@ class SearchBook extends Component {
   }
 
   state = {
-    query: ''
+    query: '',
+    showingBooks: []
   }
 
-  updateQuery = (query) => {
-    this.setState({ query: query.trim() })
+  updateQuery = (e) => {
+    this.setState({ query: e.target.value })
+    
+    if (this.state.query !== '') {
+      const match = new RegExp(escapeRegExp(this.state.query), 'i')
+      let bookshelf = this.props.books.filter((book) => match.test(book.authors.join(' ')) || match.test(book.title))
+      
+      BooksAPI.search(this.state.query, 20).then((books) => {
+      books.length > 0 ? this.setState({ showingBooks: books.concat(bookshelf).sort(sortBy('title')) }) : this.setState ({ showingBooks: bookshelf.sort(sortBy('title')) })
+      })
+    } else {
+      this.setState({ showingBooks: [] })
+    } 
   }
 
   render() {
-    let showingBooks
-    if (this.state.query) {
-      const match = new RegExp(escapeRegExp(this.state.query), 'i')
-      showingBooks = this.props.books.filter((book) => match.test(book.authors.join(' ')) || match.test(book.title))
-    } else {
-      showingBooks = this.props.books
-    }
 
-    showingBooks.sort(sortBy('title'))
-    
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -45,13 +49,13 @@ class SearchBook extends Component {
               type="text"
               placeholder="Search by title or author"
               value={this.state.query}
-              onChange={(event) => this.updateQuery(event.target.value)}
+              onChange={this.updateQuery}
             />
           </div>
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {showingBooks.map((book) => (
+            {this.state.query !== '' ? this.state.showingBooks.map((book) => (
               <li key={book.id}>
                 <div className="book">
                   <div className="book-top">
@@ -70,7 +74,7 @@ class SearchBook extends Component {
                   <div className="book-authors">{book.authors.join(", ")}</div>
                 </div>
               </li>
-            ))}
+            )) : <div></div>}
           </ol>
         </div>
       </div>
