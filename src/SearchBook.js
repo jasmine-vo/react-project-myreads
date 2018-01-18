@@ -19,11 +19,11 @@ class SearchBook extends Component {
 
   updateQuery = (e) => {
 
-    const { query } = this.state
-
-    this.setState({ query: e.target.value })
+    const query = e.target.value
     
-    if (query !== '') {
+    this.setState({ query: query })
+        
+    if (query) {
       const match = new RegExp(escapeRegExp(query), 'i')
       const bookshelf = this.props.books.filter((book) => match.test(book.authors.join(' ')) || match.test(book.title))
 
