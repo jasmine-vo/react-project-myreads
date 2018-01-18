@@ -15,3 +15,14 @@ To get this project up and running on your machine:
 
 ## Note
 The backend API uses a fixed set of cached search results and is limited to a particular set of search terms, which can be found in [SEARCH_TERMS.md](SEARCH_TERMS.md). That list of terms are the _only_ terms that will work with the backend.
+
+## Demo
+
+Shelf change on Main App
+![alt tag](/src/icons/mainapp.gif)
+
+Search Page
+![alt tag](/src/icons/search.gif)
+
+Shelf change on Search Page
+![alt tag](/src/icons/shelfchange.gif)
