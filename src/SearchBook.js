@@ -17,17 +17,18 @@ class SearchBook extends Component {
   }
 
   updateQuery = (e) => {
-    this.setState({ query: e.target.value })
-    console.log(this.state.query)
-    
-    if (this.state.query !== '') {
-      const match = new RegExp(escapeRegExp(this.state.query), 'i')
-      let bookshelf = this.props.books.filter((book) => match.test(book.authors.join(' ')) || match.test(book.title))
 
-      BooksAPI.search(this.state.query, 20).then((results) => {
+    const { query } = this.state
+
+    this.setState({ query: e.target.value })
+    
+    if (query !== '') {
+      const match = new RegExp(escapeRegExp(query), 'i')
+      const bookshelf = this.props.books.filter((book) => match.test(book.authors.join(' ')) || match.test(book.title))
+
+      BooksAPI.search(query, 20).then((results) => {
         results.length > 0 ?
           this.setState({ showingBooks: results.filter(result => bookshelf.every(book => book.id !== result.id)).concat(bookshelf).sort(sortBy('title')) }) : this.setState({ showingBooks: bookshelf.sort(sortBy('title')) })
-          console.log(this.state.showingBooks)
       })
     } else {
       this.setState({ showingBooks: [] })
@@ -35,6 +36,9 @@ class SearchBook extends Component {
   }
 
   render() {
+
+    const { query, showingBooks } = this.state
+    const { onChangeShelf } = this.props
 
     return (
       <div className="search-books">
@@ -52,20 +56,20 @@ class SearchBook extends Component {
             <input
               type="text"
               placeholder="Search by title or author"
-              value={this.state.query}
+              value={query}
               onChange={this.updateQuery}
             />
           </div>
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {this.state.query !== '' ? this.state.showingBooks.map((book) => (
+            {query !== '' ? showingBooks.map((book) => (
               <li key={book.id}>
                 <div className="book">
                   <div className="book-top">
                     <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks && book.imageLinks.thumbnail})` }}></div>
                     <div className="book-shelf-changer">
-                      <select defaultValue={book.shelf ? book.shelf : "none"} onChange={(event) => this.props.onChangeShelf(book, event.target.value)}>
+                      <select defaultValue={book.shelf ? book.shelf : "none"} onChange={(event) => onChangeShelf(book, event.target.value)}>
                         <option value="none" disabled>Move to...</option>
                         <option value="currentlyReading">Currently Reading</option>
                         <option value="wantToRead">Want to Read</option>
