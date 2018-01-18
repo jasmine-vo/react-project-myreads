@@ -7,7 +7,8 @@ import * as BooksAPI from './BooksAPI'
 
 class SearchBook extends Component {
   static propTypes = {
-    books: PropTypes.array.isRequired
+    books: PropTypes.array.isRequired,
+    onChangeShelf: PropTypes.func.isRequired
   }
 
   state = {

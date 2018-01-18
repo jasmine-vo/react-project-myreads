@@ -4,14 +4,15 @@ import sortBy from 'sort-by'
 
 class ListBooks extends Component {
   static propTypes = {
-    books: PropTypes.array.isRequired
+    books: PropTypes.array.isRequired,
+    onChangeShelf: PropTypes.func.isRequired
   }
 
   render() {
     const currentlyReading = this.props.books.filter((book) => book.shelf === 'currentlyReading').sort(sortBy('title'))
     const wantToRead = this.props.books.filter((book) => book.shelf === 'wantToRead').sort(sortBy('title'))
     const read = this.props.books.filter((book) => book.shelf === 'read').sort(sortBy('title'))
-	
+  
     return (
       <div className="list-books">
         <div className="list-books-title">
