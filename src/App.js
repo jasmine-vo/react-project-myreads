@@ -10,6 +10,8 @@ class BooksApp extends Component {
   state = {
     books: []
   }
+
+// load books currently on shelf from BooksAPI after component is mounted
   componentDidMount() {
     BooksAPI.getAll().then((books) => {
       this.setState({ books })
@@ -17,14 +19,21 @@ class BooksApp extends Component {
   }
 
   changeShelf = (book, shelf) => {
+    // update the book with new shelf status
     book.shelf = shelf
-    let updatedShelf = this.state.books.filter((b) => b.id !== book.id)
+
+    // remove book with old shelf status
+    const updatedShelf = this.state.books.filter((b) => b.id !== book.id)
+
+    // add book with new shelf status and load all books in shelf
     this.setState((state) => ({
       books: updatedShelf.concat([ book ])
     }))
+
+    // update backend server with the book's new shelf status
     BooksAPI.update(book, shelf)
   }
-                                       
+
   render() {
 
     const { books } = this.state
@@ -33,7 +42,7 @@ class BooksApp extends Component {
       <div className="app">
         <Route exact path="/" render={() => (
           <div>
-            <ListBooks 
+            <ListBooks
               books={books}
               onChangeShelf={this.changeShelf}
             />

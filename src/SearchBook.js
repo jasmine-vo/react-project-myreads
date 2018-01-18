@@ -20,18 +20,28 @@ class SearchBook extends Component {
   updateQuery = (e) => {
 
     const query = e.target.value
-    
-    this.setState({ query: query })
-        
-    if (query) {
-      const match = new RegExp(escapeRegExp(query), 'i')
-      const bookshelf = this.props.books.filter((book) => match.test(book.authors.join(' ')) || match.test(book.title))
 
+    this.setState({ query: query })
+
+    // checks if query exists/text was inputed in search bar
+    if (query) {
+
+      // use regex to remove special characters from query and ignore cases
+      const match = new RegExp(escapeRegExp(query), 'i')
+
+      // get books from bookshelf that match query
+      const bookshelf = this.props.books.filter((book) => (
+        match.test(book.authors.join(' ')) || match.test(book.title)))
+
+      // search backend server for books that match query
       BooksAPI.search(query, 20).then((results) => {
         results.length > 0 ?
+
+          // loads books if there are results from server/bookshelf
+          // if there is no match, does not load any books
           this.setState({ showingBooks: results.filter(result => bookshelf.every(book => book.id !== result.id))
             .concat(bookshelf)
-            .sort(sortBy('title')) 
+            .sort(sortBy('title'))
           }) : this.setState({ showingBooks: bookshelf.sort(sortBy('title')) })
       })
     } else {
@@ -72,7 +82,7 @@ class SearchBook extends Component {
           {query !== '' ?
           <BooksGrid 
             books={showingBooks}
-            onChangeShelf={onChangeShelf} 
+            onChangeShelf={onChangeShelf}
           /> : <div></div>}
         </div>
       </div>

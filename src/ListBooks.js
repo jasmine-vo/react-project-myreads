@@ -14,7 +14,7 @@ class ListBooks extends Component {
     const shelves = [{type: 'currentlyReading', title: 'Currently Reading'},
                      {type: 'wantToRead', title: 'Want to Read'},
                      {type: 'read', title: 'Read'}]
-  
+
     return (
       <div className="list-books">
         <div className="list-books-title">
@@ -27,7 +27,8 @@ class ListBooks extends Component {
                 <h2 className="bookshelf-title">{shelf.title}</h2>
                   <div className="bookshelf-books">
                     <BooksGrid
-                      books={books.filter((book) => book.shelf === shelf.type).sort(sortBy('title'))}
+                      books={books.filter((book) => book.shelf === shelf.type)
+                        .sort(sortBy('title'))}
                       onChangeShelf={onChangeShelf}
                     />
                   </div>
