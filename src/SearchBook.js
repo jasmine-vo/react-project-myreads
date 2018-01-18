@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import escapeRegExp from 'escape-string-regexp'
 import sortBy from 'sort-by'
 import * as BooksAPI from './BooksAPI'
+import BooksGrid from './BooksGrid.js'
 
 class SearchBook extends Component {
   static propTypes = {
@@ -28,7 +29,10 @@ class SearchBook extends Component {
 
       BooksAPI.search(query, 20).then((results) => {
         results.length > 0 ?
-          this.setState({ showingBooks: results.filter(result => bookshelf.every(book => book.id !== result.id)).concat(bookshelf).sort(sortBy('title')) }) : this.setState({ showingBooks: bookshelf.sort(sortBy('title')) })
+          this.setState({ showingBooks: results.filter(result => bookshelf.every(book => book.id !== result.id))
+            .concat(bookshelf)
+            .sort(sortBy('title')) 
+          }) : this.setState({ showingBooks: bookshelf.sort(sortBy('title')) })
       })
     } else {
       this.setState({ showingBooks: [] })
@@ -43,7 +47,10 @@ class SearchBook extends Component {
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          <Link className="close-search" to="/">Close</Link>
+          <Link
+            className="close-search"
+            to="/"
+          >Close</Link>
           <div className="search-books-input-wrapper">
             {/*
               NOTES: The search from BooksAPI is limited to a particular set of search terms.
@@ -62,28 +69,11 @@ class SearchBook extends Component {
           </div>
         </div>
         <div className="search-books-results">
-          <ol className="books-grid">
-            {query !== '' ? showingBooks.map((book) => (
-              <li key={book.id}>
-                <div className="book">
-                  <div className="book-top">
-                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks && book.imageLinks.thumbnail})` }}></div>
-                    <div className="book-shelf-changer">
-                      <select defaultValue={book.shelf ? book.shelf : "none"} onChange={(event) => onChangeShelf(book, event.target.value)}>
-                        <option value="none" disabled>Move to...</option>
-                        <option value="currentlyReading">Currently Reading</option>
-                        <option value="wantToRead">Want to Read</option>
-                        <option value="read">Read</option>
-                        <option value="none">None</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="book-title">{book.title && book.title}</div>
-                  <div className="book-authors">{book.authors && book.authors.join(", ")}</div>
-                </div>
-              </li>
-            )) : <div></div>}
-          </ol>
+          {query !== '' ?
+          <BooksGrid 
+            books={showingBooks}
+            onChangeShelf={onChangeShelf} 
+          /> : <div></div>}
         </div>
       </div>
     )

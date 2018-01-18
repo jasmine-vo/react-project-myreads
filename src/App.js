@@ -26,19 +26,30 @@ class BooksApp extends Component {
   }
                                        
   render() {
+
+    const { books } = this.state
+
     return (
       <div className="app">
         <Route exact path="/" render={() => (
           <div>
-            <ListBooks books={this.state.books} onChangeShelf={this.changeShelf} />
+            <ListBooks 
+              books={books}
+              onChangeShelf={this.changeShelf}
+            />
             <div className="open-search">
-              <Link to="/search">Add a book</Link>
+              <Link
+                to="/search"
+              >Add a book</Link>
             </div>
           </div>
           )}/>
         <Route path="/search" render={() => (
-          <SearchBook books={this.state.books} onChangeShelf={this.changeShelf} />
-          )}/>
+          <SearchBook
+            books={books}
+            onChangeShelf={this.changeShelf}
+          />
+        )}/>
       </div>
     )
   }
