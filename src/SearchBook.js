@@ -22,14 +22,15 @@ class SearchBook extends Component {
     if (this.state.query !== '') {
       const match = new RegExp(escapeRegExp(this.state.query), 'i')
       let bookshelf = this.props.books.filter((book) => match.test(book.authors.join(' ')) || match.test(book.title))
-      
-      BooksAPI.search(this.state.query, 20).then((books) => {
-      books.length > 0 ? this.setState({ showingBooks: books.concat(bookshelf).sort(sortBy('title')) }) : this.setState ({ showingBooks: bookshelf.sort(sortBy('title')) })
-      console.log(this.state.showingBooks)
+
+      BooksAPI.search(this.state.query, 20).then((results) => {
+        results.length > 0 ?
+          this.setState({ showingBooks: results.filter(result => bookshelf.every(book => book.id !== result.id)).concat(bookshelf).sort(sortBy('title')) }) : this.setState({ showingBooks: bookshelf.sort(sortBy('title')) })
+          console.log(this.state.showingBooks)
       })
     } else {
       this.setState({ showingBooks: [] })
-    } 
+    }
   }
 
   render() {
